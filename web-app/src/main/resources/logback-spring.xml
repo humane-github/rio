@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- 設定値 -->
+    <property name="APP_NAME" value="rio" />                 <!-- アプリケーション名 -->
+    <property name="APP_PACKAGE" value="jp.co.humane.rio" /> <!-- アプリケーションのパッケージ -->
+    <property name="LOG_DIR" value="${LOG_FOLDER:-log}"/>    <!-- ログ出力先：環境変数LOG_FOLDERを使用。未定義時はlog。 -->
+    <property name="LOG_BACKUP" value="${LOG_BACKUP:-7}" />  <!-- 退避ログ数：環境変数LOG_BACKUPを使用。未定義時は7。 -->
+
+    <!-- profileがdevの場合 -->
+    <springProfile name="dev">
+        <property name="APP_LEVEL" value="debug" />          <!-- アプリケーションのログレベル：debug -->
+        <property name="ROOT_LEVEL" value="info" />          <!-- ルートロガーのログレベル：info -->
+        <property name="ROOT_APPENDER" value="STDOUT" />     <!-- 出力先：標準出力 -->
+    </springProfile>
+
+    <!-- profileがproductionの場合 -->
+    <springProfile name="production">
+        <property name="APP_LEVEL" value="info" />           <!-- アプリケーションのログレベル：info -->
+        <property name="ROOT_LEVEL" value="warn" />          <!-- ルートロガーのログレベル：warn -->
+        <property name="ROOT_APPENDER" value="FILE" />       <!-- 出力先：ファイル -->
+    </springProfile>
+
+    <!-- ログレベルをJMXから変更可能にする -->
+    <jmxConfigurator />
+
+    <!-- スレッドIDを%tidとして生成 -->
+    <conversionRule conversionWord="tid" converterClass="jp.co.humane.rio.common.logger.ThreadIdConverter" />
+
+    <!-- 標準出力設定 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern><![CDATA[%d{yyyy/MM/dd HH:mm:ss.SSS} [%tid] %-5level %-50C{50}\t%msg%n]]></pattern>
+        </encoder>
+    </appender>
+
+    <!-- ファイル出力設定 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/${APP_NAME}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/${APP_NAME}_%d{yyyyMMdd}.log</fileNamePattern>
+            <maxHistory>${LOG_BACKUP}</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern><![CDATA[%d{yyyy/MM/dd HH:mm:ss.SSS} [%tid] %-5level %-50C{50}\t%msg%n]]></pattern>
+        </encoder>
+    </appender>
+
+    <!-- アプリケーションログ設定 -->
+    <logger name="${APP_PACKAGE}">
+        <level value="${APP_LEVEL}" />
+    </logger>
+
+    <!-- 以下、必要に応じて -->
+    <!-- 参考：https://qiita.com/YAKINIKU/items/5141c7205f3c67691c92 -->
+    <!--
+    <logger name="jdbc.sqltiming">
+        <level value="debug" />
+    </logger>
+    <logger name="jdbc.sqlonly">
+        <level value="debug" />
+    </logger>
+    <logger name="jdbc.audit">
+        <level value="debug" />
+    </logger>
+    <logger name="jdbc.connection">
+        <level value="debug" />
+    </logger>
+    <logger name="jdbc.resultset">
+        <level value="debug" />
+    </logger>
+    <logger name="jdbc.resultsettable">
+        <level value="debug" />
+    </logger>
+    -->
+
+    <!-- ルートロガー -->
+    <root level="${ROOT_LEVEL}">
+        <appender-ref ref="${ROOT_APPENDER}" />
+    </root>
+</configuration>

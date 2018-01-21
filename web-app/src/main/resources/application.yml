@@ -1,0 +1,71 @@
+spring:
+    profiles:
+        active: dev
+    application:
+        name: room-watch
+    http:
+        multipart:
+            max-file-size: 10MB
+    datasource:
+        username: riouser
+        password: riopass
+        url: jdbc:postgresql://192.168.0.90:5432/riodb
+        driverClassName: org.postgresql.Driver
+
+server:
+    context-path: /room-watch
+    port: 8081
+
+rio:
+    version: 1.0
+    openbr:
+        timeout: 30
+        threashold-ratio: 0.7
+
+---
+spring:
+    profiles: dev
+
+    datasource:
+        username: riouser
+        password: riopass
+        url: jdbc:postgresql://192.168.0.90:5432/riodb
+        driverClassName: org.postgresql.Driver
+
+rio:
+    auth:
+        img-path: img/auth
+        update-file-path: img/update
+        url: /rio/auth/
+    history:
+        img-path: img/history
+        url: /rio/history/
+    openbr:
+        exe-path: cscript.exe
+        script-path: br/stub.vbs
+        in-img-dir: br/rcgn
+        out-csv-dir: br/result
+
+---
+spring:
+    profiles: production
+
+    datasource:
+        username: riouser
+        password: riopass
+        url: jdbc:postgresql://192.168.0.90:5432/riodb
+        driverClassName: org.postgresql.Driver
+
+rio:
+    auth:
+        img-path: ${AUTH_IMG_PATH}
+        update-file-path: ${AUTH_UPDATE_FILE_PATH}
+        url: /rio/auth/
+    history:
+        img-path: ${HISTORY_IMG_PATH}
+        url: /rio/history/
+    openbr:
+        exe-path: /bin/sh
+        script-path: ${OPENBR_SCRIPT_PATH}
+        in-img-dir: ${OPENBR_IMG_DIR}
+        out-csv-dir: ${OPENBR_CSV_DIR}

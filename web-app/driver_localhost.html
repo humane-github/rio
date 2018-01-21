@@ -1,0 +1,312 @@
+<!doctype html>
+<!--
+  fetch APIを使うのでchromeから起動してください。
+  corsを無視するため、以下のコマンドラインでchromeを起動してください(ショートカットで設定できます)。
+   chrome.exe --user-data-dir="%UserProfile%\AppData\Local\Google\Chrome\User Data" --disable-web-security
+   ※一旦chromeの全終了が必要
+-->
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.min.js"></script>
+</head>
+<body>
+  page<br>
+  <select id="page"></select><br>
+  request body<br>
+  <textarea id="textin" style="width:100%; height:150px;"></textarea>
+  <form id="formin" enctype="multipart/form-data" style="display: none; border: solid 1px black; padding: 0.5em;"></form>
+  <br>
+  <button id="send" type="button">send</button>
+  <br>
+  response body<br>
+  <textarea id="textout" style="width:100%; height:150px;"></textarea>
+  <br><br>
+  <a id="dllink" href="#" download="" style="visibility: hidden;"></a>
+  <script>
+  
+    reqData = getReqData();
+    resData = null;
+    page    = document.getElementById('page');
+    textin  = document.getElementById('textin');
+    textout = document.getElementById('textout');
+    send    = document.getElementById('send');
+    formin  = document.getElementById('formin');
+    
+    // ドロップダウンリストに項目を追加
+    Object.keys(reqData).forEach(function(key) {
+      var req = reqData[key];
+      var opt = document.createElement('option');
+      opt.value = key;
+      opt.innerText = req.name;
+      page.options.add(opt);
+    });
+    page.onchange = onOptionChange;
+    
+    // ドロップダウンリストが選択されたらデータを更新
+    function onOptionChange() {
+      switch (reqData[this.value].method) {
+      
+      // multipart/form-dataの場合はフォームを表示
+      case 'POST-FORM':
+        textin.style.display = 'none';
+        formin.style.display = 'block';
+        formin.innerHTML = reqData[this.value].data;
+        break;
+        
+      // それ以外の場合はJSON形式
+      default:
+        textin.style.display = 'block';
+        formin.style.display = 'none';
+        var data = reqData[this.value].data;
+        textin.value = JSON.stringify(data, null, '    ');
+      
+      }
+    };
+    onOptionChange.call(page.options[0]);
+    
+    // sendボタン押下で通信を実施
+    send.onclick = function() {
+    
+      var key = page.value;
+      var req = reqData[key];
+      var data = textin.value;
+      var sendFetch = getFetchFn(data, req)
+      var responseFn = getResponseFn(req.resType);
+      var dataFn = getDataFn(req.resType);
+
+      var x = sendFetch().then(responseFn).then(dataFn).catch(function(err) {
+        console.log(err);
+        textout.value = err.message + "\n(chromeのCORSが無効化されていることを確認してください)";
+      });
+    };
+    
+    // 送信データの関数を生成
+    function getFetchFn(data, req) {
+    
+      var url = req.url;
+      var headers = new Headers();
+      var init = {headers: headers};
+      
+      // ヘッダ情報を設定
+      for (var k in req.header) {
+        headers.append(k, req.header[k]);
+      }
+      
+      switch (req.method) {
+      
+        // GETメソッドの場合はクエリ文字列を作成
+        case 'GET':
+          init['method'] = 'GET';
+          var query = '?';
+          var data = JSON.parse(data);
+          Object.keys(data).forEach(function(key) {
+            query += key + '=' + encodeURIComponent(data[key]) + '&';
+          });
+          url = req.url + query.substring(0, query.length - 1);
+          break;
+      
+        // POSTの場合はjsonデータを送信
+        case 'POST':
+          init['method'] = 'POST';
+          init['body'] = data;
+          headers.append('Content-Type', 'application/json');
+          break;
+      
+        // POST(multipart/form-data)の場合はフォームを送信
+        case 'POST-FORM':
+          init['method'] = 'POST';
+          init['body'] = new FormData(formin);
+          url = req.url;
+          break;
+      }
+      
+      init['headers'] = headers;
+      
+      return fetch.bind(this, url, init);
+    }
+    
+    // 受信処理の関数を生成
+    function getResponseFn(resType) {
+      
+      switch (resType) {
+      
+        case 'json':
+          return function(response) {
+            resData = response;
+            checkStatus(response);
+            return response.json();
+          };
+        
+        case 'blob':
+          return function(response) {
+            resData = response;
+            checkStatus(response);
+            return response.blob();
+          };
+        
+        case 'arrayBuffer':
+          return function(response) {
+            resData = response;
+            checkStatus(response);
+            return response.arrayBuffer();
+          };
+        
+        case 'text':
+          return function(response) {
+            resData = response;
+            checkStatus(response);
+            return response.text();
+          };
+        
+        default:
+          throw '未定義の返却型';
+      }
+    };
+    
+    // レスポンスの状態を確認
+    function checkStatus(response) {
+      if (response.ok) {
+        return;
+      }
+      textout.value = "#### error ####\nstatus code : " + response.status + "\nstatus text : " + response.statusText;
+      console.log(response);
+    }
+    
+    // 受信データの処理関数を生成
+    function getDataFn(resType) {
+    
+      switch (resType) {
+      
+        case 'json':
+          return function(data) {
+            textout.value = JSON.stringify(data, null, '    ');
+            return;
+          };
+        
+        case 'blob':
+          return function(data) {
+            var dllink = document.getElementById('dllink');
+            dllink.download = getFileName();
+            dllink.href = window.URL.createObjectURL(data);
+            dllink.click();
+            return;
+          };
+        
+        case 'arrayBuffer':
+          return function(data) {
+            console.log(data);
+            return;;
+          };
+        
+        case 'text':
+          return function(data) {
+            textout.value = data;
+            return;
+          };
+        
+        default:
+          throw '未定義の返却型';
+      }
+    
+    };
+    
+    // ファイル名を取得
+    function getFileName() {
+      var cd = resData.headers.get('content-disposition');
+      if (cd) {
+        return cd.match(/filename="?([^"]*)"?$/)[1];
+      }
+      var ct = resData.headers.get('content-type');
+      var ext = ct.match(/\/(.[^;]*);?/)[1];
+      ext = (ext === 'plain' && 'txt') || (ext === 'javascript' && 'js') || (ext === 'vnd.ms-excel' && 'xlsx') || (ext === 'vnd.ms-powerpoint' && 'pptx') || (ext === 'msword' && 'docx') || ext;
+      return 'dummy.' + ext;
+    };
+    
+    // リクエストデータを取得
+    function getReqData() {
+      var urlHead = 'http://localhost:8081/room-watch';
+      var header = {};
+      var reqData = {};
+      reqData['auth'] = {
+        name: '認証IF', 
+        url: urlHead + '/v1.0/user/certify', 
+        header: header, 
+        method: 'POST-FORM', 
+        resType: 'json', 
+        data: 'カメラID：<input type="text" name="cameraId" value="c111"></input><br/>イメージ：<input type="file" name="image"></input><br/>'
+      };
+      reqData['historySelect'] = {
+        name: '入退室履歴情報一覧取得IF', 
+        url: urlHead + '/v1.0/entryHistoryInfo/selectList', 
+        header: header, 
+        method: 'POST', 
+        resType: 'json', 
+        data: {buildingId: "B0001", roomId: "R0001", ioType: "1", certifyDateFrom: "2999/01/02 01:02", certifyDateTo: "2999/11/12 11:12", sectionId: "S0001", personId: "P0001", personName: "山田太郎"}
+      };
+      reqData['entrancePersonSelect'] = {
+        name: '入室者情報一覧取得IF', 
+        url: urlHead + '/v1.0/entrancePersonInfo/selectList', 
+        header: header, 
+        method: 'POST', 
+        resType: 'json', 
+        data: {"buildingId": "B0001", "roomId": "R0001"}
+      };
+      reqData['entrancePersonDetailSelect'] = {
+        name: '入室者詳細情報一覧取得IF', 
+        url: urlHead + '/v1.0/entrancePersonDetailInfo/selectList', 
+        header: header, 
+        method: 'POST', 
+        resType: 'json', 
+        data: {buildingId: "B0001", roomId: "R0001", personId: "P0001", personName: "山田太郎"}
+      };
+      reqData['buildingSelect'] = {
+        name: '建物情報一覧取得IF', 
+        url: urlHead + '/v1.0/buildingInfo/selectList', 
+        header: header, 
+        method: 'POST', 
+        resType: 'json', 
+        data: {}
+      };
+      reqData['roomSelect'] = {
+        name: '部屋情報一覧取得IF', 
+        url: urlHead + '/v1.0/roomInfo/selectList', 
+        header: header, 
+        method: 'POST', 
+        resType: 'json', 
+        data: {buildingId: "B0001"}
+      };
+      reqData['sectionSelect'] = {
+        name: '部署情報一覧取得IF', 
+        url: urlHead + '/v1.0/sectionInfo/selectList', 
+        header: header, 
+        method: 'POST', 
+        resType: 'json', 
+        data: {}
+      };
+      reqData['personSelect'] = {
+        name: '個人情報取得IF', 
+        url: urlHead + '/v1.0/personInfo/select', 
+        header: header, 
+        method: 'POST', 
+        resType: 'json', 
+        data: {personId: "p1"}
+      };
+      
+      reqData['personUpdate'] = {
+        name: '個人情報更新IF', 
+        url: urlHead + '/v1.0/personInfo/update', 
+        header: header, 
+        method: 'POST-FORM', 
+        resType: 'json', 
+        data: '個人ID：<input type="text" name="personId" value="P0001"></input><br/>氏名：<input type="text" name="personName" value="山田太郎"></input><br/>正面画像ファイル：<input type="file" name="frontImageFile"></input><br/>左側画像ファイル：<input type="file" name="leftImageFile"></input><br/>右側画像ファイル：<input type="file" name="rightImageFile"></input><br/>'
+      };
+
+      
+      
+      return reqData;
+    }
+    
+  </script>
+</body>
+</html>
