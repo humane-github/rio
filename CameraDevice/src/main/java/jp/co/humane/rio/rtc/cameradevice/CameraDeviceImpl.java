@@ -1,4 +1,4 @@
-package jp.co.humane.rtc.cameradevice;
+package jp.co.humane.rio.rtc.cameradevice;
 import org.opencv.core.Mat;
 import org.opencv.highgui.VideoCapture;
 
