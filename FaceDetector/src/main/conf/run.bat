@@ -1,28 +1,28 @@
-@rem CameraDeviceComp‚ğ‹N“®
+@rem CameraDeviceCompï¿½ï¿½ï¿½Nï¿½ï¿½
 @echo off
 
-@rem ƒtƒ@ƒCƒ‹‚Ì‘¶İ‚·‚éƒfƒBƒŒƒNƒgƒŠ‚ÌƒpƒX‚ÉˆÚ“®
+@rem ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Ì‘ï¿½ï¿½İ‚ï¿½ï¿½ï¿½fï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½Ìƒpï¿½Xï¿½ÉˆÚ“ï¿½
 set CURRENT_DIR=%~dp0
 cd %CURRENT_DIR%
 
-@rem ƒRƒ}ƒ“ƒhƒvƒƒ“ƒvƒgƒ^ƒCƒgƒ‹•ÏX
+@rem ï¿½Rï¿½}ï¿½ï¿½ï¿½hï¿½vï¿½ï¿½ï¿½ï¿½ï¿½vï¿½gï¿½^ï¿½Cï¿½gï¿½ï¿½ï¿½ÏX
 title %CURRENT_DIR:*bin\=%%~nx0
-@rem “ú–{Œê‚ğˆµ‚¦‚é‚æ‚¤‚É‚·‚é
+@rem ï¿½ï¿½ï¿½{ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ‚¤ï¿½É‚ï¿½ï¿½ï¿½
 chcp 932
 
-@rem jarƒtƒ@ƒCƒ‹‚Ì–¼‘OiartifactIdj
+@rem jarï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Ì–ï¿½ï¿½Oï¿½iartifactIdï¿½j
 set JAR_NAME=face-detector.jar
-@rem ƒƒCƒ“ƒNƒ‰ƒX
-set MAIN_CLASS=jp.co.humane.rtc.facedetector.FaceDetectorImpl
-@rem opencvƒ‰ƒCƒuƒ‰ƒŠƒpƒX
-set OPENCV_LIB=\\ls-wsxl973\p-›“c\ŠÂ‹«\’z\opencv\x64
-@rem confƒtƒ@ƒCƒ‹‚Ì–¼‘O
+@rem ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½X
+set MAIN_CLASS=jp.co.humane.rio.rtc.facedetector.FaceDetectorImpl
+@rem opencvï¿½ï¿½ï¿½Cï¿½uï¿½ï¿½ï¿½ï¿½ï¿½pï¿½X
+set OPENCV_LIB=\\ls-wsxl973\p-ï¿½ï¿½ï¿½c\ï¿½Â‹ï¿½ï¿½\ï¿½z\opencv\x64
+@rem confï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Ì–ï¿½ï¿½O
 set CONF_NAME=rtc.conf
 
-@rem ƒNƒ‰ƒXƒpƒX‚ğİ’è
+@rem ï¿½Nï¿½ï¿½ï¿½Xï¿½pï¿½Xï¿½ï¿½İ’ï¿½
 set CLASSPATH=%CLASSPATH%;"%JAR_NAME%"
 
-@rem RTC‹N“®
+@rem RTCï¿½Nï¿½ï¿½
 java -classpath %CLASSPATH% -Djava.library.path=%OPENCV_LIB% %MAIN_CLASS% -f "%CONF_NAME%"
 
 pause

@@ -1,4 +1,4 @@
-package jp.co.humane.rtc.facedetector.processor;
+package jp.co.humane.rio.rtc.facedetector.processor;
 
 import RTC.TimedLong;
 import jp.co.humane.rtc.common.component.state.StateProcessResult;

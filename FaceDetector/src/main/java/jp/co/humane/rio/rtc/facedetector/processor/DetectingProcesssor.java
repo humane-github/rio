@@ -1,4 +1,4 @@
-package jp.co.humane.rtc.facedetector.processor;
+package jp.co.humane.rio.rtc.facedetector.processor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,12 +21,12 @@ import org.opencv.objdetect.Objdetect;
 
 import RTC.CameraImage;
 import jp.co.humane.opencvlib.MatViewer;
+import jp.co.humane.rio.rtc.facedetector.FaceDetectorConfig;
 import jp.co.humane.rtc.common.component.state.StateProcessResult;
 import jp.co.humane.rtc.common.component.state.StateProcessor;
 import jp.co.humane.rtc.common.port.RtcInPort;
 import jp.co.humane.rtc.common.port.RtcOutPort;
 import jp.co.humane.rtc.common.util.ElapsedTimer;
-import jp.co.humane.rtc.facedetector.FaceDetectorConfig;
 
 /**
  * 検出中ステータスでの処理クラス。

@@ -1,4 +1,4 @@
-package jp.co.humane.rtc.facedetector;
+package jp.co.humane.rio.rtc.facedetector;
 
 import java.io.File;
 

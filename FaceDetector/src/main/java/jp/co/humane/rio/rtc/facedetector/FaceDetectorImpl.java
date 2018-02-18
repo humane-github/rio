@@ -1,16 +1,16 @@
-package jp.co.humane.rtc.facedetector;
+package jp.co.humane.rio.rtc.facedetector;
 
 import RTC.CameraImage;
 import RTC.ReturnCode_t;
 import RTC.TimedLong;
 import jp.co.humane.opencvlib.OpenCVLib;
+import jp.co.humane.rio.rtc.facedetector.processor.DetectingProcesssor;
+import jp.co.humane.rio.rtc.facedetector.processor.WaitWakeupProcessor;
 import jp.co.humane.rtc.common.component.DataFlowStatefullComponent;
 import jp.co.humane.rtc.common.port.RtcInPort;
 import jp.co.humane.rtc.common.port.RtcOutPort;
 import jp.co.humane.rtc.common.starter.RtcStarter;
 import jp.co.humane.rtc.common.util.CorbaObj;
-import jp.co.humane.rtc.facedetector.processor.DetectingProcesssor;
-import jp.co.humane.rtc.facedetector.processor.WaitWakeupProcessor;
 import jp.go.aist.rtm.RTC.Manager;
 
 /**
