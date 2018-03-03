@@ -109,6 +109,9 @@ public class PersonUpdateController {
             return result;
         }
 
+        // この機能で初回登録もできるようにフォルダがなければ作成する
+        makeDir(id);
+
         // 更新前のファイルは削除
         deleteAuthImg(id);
 
@@ -148,6 +151,17 @@ public class PersonUpdateController {
     }
 
     /**
+     * 指定の個人IDの認証用画像ファイルの配置ディレクトリがなければ作成する。
+     * @param id 個人ID。
+     */
+    private void makeDir(String id) {
+        File idDir = Paths.get(imgPath, id).toFile();
+        if (!idDir.exists()) {
+            idDir.mkdir();
+        }
+    }
+
+    /**
      * 指定の個人IDに対する認証用画像ファイルを削除する。
      * @param id 個人ID。
      */
@@ -178,10 +192,11 @@ public class PersonUpdateController {
 
         String id = req.getPersonId();
 
+        // ファイル名が一意である必要があるのでidをファイル名に含める
         Map<Path, MultipartFile> map = new HashMap<>();
-        map.put(Paths.get(imgPath, id, URL.FRONT_IMG), req.getFrontImageFile());
-        map.put(Paths.get(imgPath, id, URL.LEFT_IMG), req.getLeftImageFile());
-        map.put(Paths.get(imgPath, id, URL.RIGHT_IMG), req.getRightImageFile());
+        map.put(Paths.get(imgPath, id, id + "_" + URL.FRONT_IMG), req.getFrontImageFile());
+        map.put(Paths.get(imgPath, id, id + "_" + URL.LEFT_IMG), req.getLeftImageFile());
+        map.put(Paths.get(imgPath, id, id + "_" + URL.RIGHT_IMG), req.getRightImageFile());
         map.entrySet().stream().filter(entry -> {
             MultipartFile file = entry.getValue();
             if (null == file) {

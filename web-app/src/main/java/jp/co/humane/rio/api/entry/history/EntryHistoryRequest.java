@@ -35,12 +35,12 @@ public class EntryHistoryRequest extends BaseDTO {
 
     /** 認証日時（From） */
     @Length(max = 16)
-    @DateFormat(format = "yyyy/MM/dd hh:mm")
+    @DateFormat(format = "yyyy/MM/dd HH:mm")
     private String certifyDateFrom = null;
 
     /** 認証日時（To） */
     @Length(max = 16)
-    @DateFormat(format = "yyyy/MM/dd hh:mm")
+    @DateFormat(format = "yyyy/MM/dd HH:mm")
     private String certifyDateTo = null;
 
     /** 部署ID */

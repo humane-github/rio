@@ -225,7 +225,7 @@
     
     // リクエストデータを取得
     function getReqData() {
-      var urlHead = 'http://192.168.0.90:8081/rio/mng/room-watch';
+      var urlHead = 'http://192.168.0.90/rio/mng/room-watch';
       var header = {};
       var reqData = {};
       reqData['auth'] = {
@@ -242,7 +242,7 @@
         header: header, 
         method: 'POST', 
         resType: 'json', 
-        data: {buildingId: "B0001", roomId: "R0001", ioType: "1", certifyDateFrom: "2999/01/02 01:02", certifyDateTo: "2999/11/12 11:12", sectionId: "S0001", personId: "P0001", personName: "山田太郎"}
+        data: { "buildingId": "b1", "roomId": "r11", "ioType": "1", "certifyDateFrom": "2017/12/01 00:00", "certifyDateTo": "2018/04/01 00:00", "sectionId": "s1", "personId": "p1", "personName": "山田太郎"}
       };
       reqData['entrancePersonSelect'] = {
         name: '入室者情報一覧取得IF', 
@@ -250,7 +250,7 @@
         header: header, 
         method: 'POST', 
         resType: 'json', 
-        data: {"buildingId": "B0001", "roomId": "R0001"}
+        data: {"buildingId": "b1", "roomId": "r11"}
       };
       reqData['entrancePersonDetailSelect'] = {
         name: '入室者詳細情報一覧取得IF', 
@@ -258,7 +258,7 @@
         header: header, 
         method: 'POST', 
         resType: 'json', 
-        data: {buildingId: "B0001", roomId: "R0001", personId: "P0001", personName: "山田太郎"}
+        data: {buildingId: "b1", roomId: "r12", personId: "p1", personName: "山田太郎"}
       };
       reqData['buildingSelect'] = {
         name: '建物情報一覧取得IF', 
@@ -274,14 +274,14 @@
         header: header, 
         method: 'POST', 
         resType: 'json', 
-        data: {buildingId: "B0001"}
+        data: {buildingId: "b1"}
       };
       reqData['sectionSelect'] = {
         name: '部署情報一覧取得IF', 
         url: urlHead + '/v1.0/sectionInfo/selectList', 
         header: header, 
         method: 'POST', 
-        resType: 'json', 
+        resType: 'json',
         data: {}
       };
       reqData['personSelect'] = {

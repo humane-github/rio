@@ -14,7 +14,7 @@ spring:
 
 server:
     context-path: /room-watch
-    port: 8081
+    port: 8080
 
 rio:
     version: 1.0
