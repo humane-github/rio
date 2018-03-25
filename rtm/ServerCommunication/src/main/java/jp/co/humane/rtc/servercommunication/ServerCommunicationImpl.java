@@ -42,6 +42,9 @@ public class ServerCommunicationImpl extends DataFlowComponent<ServerCommunicati
     /** 処理結果コードのキー */
     private static final String KEY_RESULT_CODE = "resultCode";
 
+    /** 処理結果のキー */
+    private static final String KEY_RESULT_INFO = "resultInfo";
+
     /** 処理結果コード：正常 */
     private static final String RESULT_CODE_SUCCESS = "001";
 
@@ -69,6 +72,16 @@ public class ServerCommunicationImpl extends DataFlowComponent<ServerCommunicati
      */
     public ServerCommunicationImpl(Manager manager) {
         super(manager);
+    }
+
+    /**
+     * アクティブ化処理。
+     * @param ec_id ExecutionContext ID.
+     * @return リターンコード。
+     */
+    protected ReturnCode_t onRtcActivated(int ec_id) {
+        cameraImageIn.clear();
+        return ReturnCode_t.RTC_OK;
     }
 
     /**
@@ -141,19 +154,19 @@ public class ServerCommunicationImpl extends DataFlowComponent<ServerCommunicati
         // 処理結果コードが正常ではない場合は認証NGとする
         HttpEntity entity = response.getEntity();
         // String resString = EntityUtils.toString(entity, HTTP_CHARSET);
-        Map<String, String> map = null;
+        Map<String, Object> map = null;
         try {
             map = MAPPER.readValue(entity.getContent(), Map.class);
         } catch (IOException ex) {
             throw new RuntimeException("認証結果の読み取りに失敗しました。", ex);
         }
-        if (!StringUtils.equals(map.get(KEY_RESULT_CODE), RESULT_CODE_SUCCESS)) {
+        if (!StringUtils.equals(map.get(KEY_RESULT_CODE).toString(), RESULT_CODE_SUCCESS)) {
             logger.error("認証リクエストに失敗しました。処理結果コード：" + map.get(KEY_RESULT_CODE));
             return false;
         }
 
-        // 認証成功を返す
-        return true;
+        // 認証結果を返却
+        return (boolean) map.get(KEY_RESULT_INFO);
     }
 
     /**

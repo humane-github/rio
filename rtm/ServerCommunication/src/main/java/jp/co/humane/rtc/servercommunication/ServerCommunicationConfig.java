@@ -22,8 +22,8 @@ public class ServerCommunicationConfig extends ConfigBase {
      * デフォルトコンストラクタ。
      */
     public ServerCommunicationConfig() {
-        // 実行周期のデフォルト値を3秒に設定
-        this.interval = 3000000L;
+        // 実行周期のデフォルト値を30秒に設定
+        this.interval = 30000000L;
     }
 
     /**

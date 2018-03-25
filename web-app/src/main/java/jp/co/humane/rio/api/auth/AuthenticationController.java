@@ -128,7 +128,7 @@ public class AuthenticationController {
         addAuthHistory(personId, cameraId, canGoThrough, req.getImage());
 
         // 蓄積出来たら正常終了を返す
-        ret.setResultInfo(Boolean.TRUE);
+        ret.setResultInfo(canGoThrough);
         return ret;
     }
 
@@ -158,13 +158,17 @@ public class AuthenticationController {
             }
         });
 
+        // パスは 「個人ID/ファイル名」 の形式になっているのでそこから個人IDを抽出
+        String personId = StringUtils.split(maxEntry.getKey(), "/")[0];
+        LOGGER.debug("最大マッチ率={}、対象個人ID={}", maxEntry.getValue(), personId);
+
         // 最大のマッチ率が閾値を超えていない場合はnullを返す
         if (maxEntry.getValue() < threasholdRatio) {
             return null;
         }
 
-        // パスは 「個人ID/ファイル名」 の形式になっているのでそこから個人IDを抽出して返す
-        return StringUtils.split(maxEntry.getKey(), "/")[0] ;
+        // 個人IDを返す
+        return personId;
     }
 
     /**
@@ -180,9 +184,9 @@ public class AuthenticationController {
         // 現在日時を認証日時とする
         Date certifyDate = DateUtils.now();
 
-        // 履歴の画像ファイルは「年/月/日/カメラID.png」とする
+        // 履歴の画像ファイルは「年/月/日/時分秒_カメラID.png」とする
         String dir = DateUtils.format(certifyDate, DateFormat.YMD_S);
-        String fileName = cameraId + ".png";
+        String fileName = DateUtils.format(certifyDate, DateFormat.HMS) + cameraId + ".png";
 
         // フォルダが存在しない場合は作成
         try {
@@ -196,6 +200,7 @@ public class AuthenticationController {
         Path imgPath = Paths.get(historyDir, dir, fileName).toAbsolutePath();
         try {
             Files.write(imgPath, image.getBytes());
+            LOGGER.debug("認証画像を保存しました。カメラID={}、個人ID={}、パス={}", cameraId, personId, imgPath.toString());
         } catch (IOException ex) {
             LOGGER.error(LogId.E_AUTH_IMG_FILE_SAVE_ERR, imgPath.toString());
             throw new ApplicationException(ex);
@@ -204,7 +209,7 @@ public class AuthenticationController {
         // DBに履歴を登録する
         try {
             historyDao.insertHistory(personId, Boolean.valueOf(authResult), cameraId,
-                                    certifyDate, dir + "/" + fileName);
+                                    certifyDate, fileName);
         } catch (Exception ex) {
             // 履歴が登録できない場合は画像ファイルも削除する
             try {

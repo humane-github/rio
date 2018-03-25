@@ -107,7 +107,7 @@ public interface ViewPresenceDAO {
               "FROM",
                 "view_presence",
               "WHERE",
-                "certify_date_out IS NOT NULL",
+                "certify_date_out IS NULL",
               "GROUP BY",
                 "building_id,",
                 "room_id",

@@ -21,4 +21,7 @@ public class DateFormat {
     /** yyyy/MM/dd */
     public static final String YMD_S = "yyyy/MM/dd";
 
+    /** HHmmss */
+    public static final String HMS = "HHmmss";
+
 }

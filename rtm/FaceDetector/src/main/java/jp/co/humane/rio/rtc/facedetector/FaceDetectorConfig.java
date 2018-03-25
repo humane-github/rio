@@ -30,7 +30,7 @@ public class FaceDetectorConfig extends ConfigBase {
     private Integer detectThreshold = 1;
 
     /** 検出と判定する画像内の顔の割合 */
-    private Double detectFaceRatio = 0.3;
+    private Double detectFaceRatio = 0.01;
 
     /**
      * デフォルトコンストラクタ。

@@ -1,6 +1,5 @@
 package jp.co.humane.rio.api.entry.history;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -159,13 +158,8 @@ public class EntryHistoryController {
      * @return 履歴画像ファイルのURL。
      */
     private String createHistoryUrl(EntryHistoryDetailInfoDTO dto) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(dto.getCertifyDate());
-        String year = String.valueOf((cal.get(Calendar.YEAR)));
-        String month = String.valueOf((cal.get(Calendar.MONTH)));
-        String day = String.valueOf((cal.get(Calendar.DAY_OF_MONTH)));
-
-        return historyUrl + year + "/" + month + "/" + day + "/" + dto.getPersonId() + ".png";
+        String ymd = DateUtils.format(dto.getCertifyDate(), DateFormat.YMD_S);
+        return historyUrl + ymd + "/" + dto.getImageFileName();
     }
 
 }

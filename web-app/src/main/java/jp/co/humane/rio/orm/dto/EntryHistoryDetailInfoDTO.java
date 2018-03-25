@@ -38,6 +38,9 @@ public class EntryHistoryDetailInfoDTO extends BaseDTO {
     /** 氏名 */
     private String personName = null;
 
+    /** 画像ファイル名 */
+    private String imageFileName = null;
+
     /**
      * デフォルトコンストラクタ。
      */
@@ -188,4 +191,21 @@ public class EntryHistoryDetailInfoDTO extends BaseDTO {
     public void setPersonName(String personName) {
         this.personName = personName;
     }
+
+    /**
+     * imageFileNameを取得する。
+     * @return imageFileName imageFileName。
+     */
+    public String getImageFileName() {
+        return imageFileName;
+    }
+
+    /**
+     * imageFileNameを設定する。
+     * @param imageFileName imageFileName。
+     */
+    public void setImageFileName(String imageFileName) {
+        this.imageFileName = imageFileName;
+    }
+
 }

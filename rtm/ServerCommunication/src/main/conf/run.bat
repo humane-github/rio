@@ -14,6 +14,8 @@ chcp 932
 set JAR_NAME=server-communication.jar
 @rem メインクラス
 set MAIN_CLASS=jp.co.humane.rtc.servercommunication.ServerCommunicationImpl
+@rem opencvライブラリパス
+set OPENCV_LIB=C:\work\tool\opencv
 @rem confファイルの名前
 set CONF_NAME=rtc.conf
 @rem カメラID
@@ -23,6 +25,6 @@ set CAMERA_ID=c111
 set CLASSPATH=%CLASSPATH%;"%JAR_NAME%"
 
 @rem RTC起動
-java -classpath %CLASSPATH% -Dcamera.id=%CAMERA_ID% %MAIN_CLASS% -f "%CONF_NAME%"
+java -classpath %CLASSPATH% -Djava.library.path=%OPENCV_LIB% -Dcamera.id=%CAMERA_ID% %MAIN_CLASS% -f "%CONF_NAME%"
 
 pause

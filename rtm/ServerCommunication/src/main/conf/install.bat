@@ -44,9 +44,10 @@ cd bin\%JAR_NAME%
 set TARGET_DIR=%CD%
 
 @rem 各種ファイルをコピー
-copy /Y "%CONF_DIR%run.bat"                "%TARGET_DIR%\run.bat"
-copy /Y "%CONF_DIR%rtc.conf"               "%TARGET_DIR%\rtc.conf"
-copy /Y "%PRJ_ROOT%\target\%JAR_NAME%.jar" "%TARGET_DIR%\%JAR_NAME%.jar"
+copy /Y "%CONF_DIR%run.bat"                  "%TARGET_DIR%\run.bat"
+copy /Y "%CONF_DIR%rtc.conf"                 "%TARGET_DIR%\rtc.conf"
+copy /Y "%CONF_DIR%ServerCommunication.conf" "%TARGET_DIR%\ServerCommunication.conf"
+copy /Y "%PRJ_ROOT%\target\%JAR_NAME%.jar"   "%TARGET_DIR%\%JAR_NAME%.jar"
 
 @rem 終了コメント
 popd

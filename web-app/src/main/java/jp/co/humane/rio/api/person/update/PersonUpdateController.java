@@ -192,11 +192,10 @@ public class PersonUpdateController {
 
         String id = req.getPersonId();
 
-        // ファイル名が一意である必要があるのでidをファイル名に含める
         Map<Path, MultipartFile> map = new HashMap<>();
-        map.put(Paths.get(imgPath, id, id + "_" + URL.FRONT_IMG), req.getFrontImageFile());
-        map.put(Paths.get(imgPath, id, id + "_" + URL.LEFT_IMG), req.getLeftImageFile());
-        map.put(Paths.get(imgPath, id, id + "_" + URL.RIGHT_IMG), req.getRightImageFile());
+        map.put(Paths.get(imgPath, id, URL.FRONT_IMG), req.getFrontImageFile());
+        map.put(Paths.get(imgPath, id, URL.LEFT_IMG), req.getLeftImageFile());
+        map.put(Paths.get(imgPath, id, URL.RIGHT_IMG), req.getRightImageFile());
         map.entrySet().stream().filter(entry -> {
             MultipartFile file = entry.getValue();
             if (null == file) {
