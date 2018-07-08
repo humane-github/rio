@@ -1,6 +1,5 @@
 package jp.co.humane.rio.api.person.select;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -46,11 +45,11 @@ public class PersonSelectController {
      */
     @PostMapping(URL.PERSON_SELECT)
     @ResponseBody
-    public ApiResult<List<PersonSelectResponse>>
+    public ApiResult<PersonSelectResponse>
         selectList(@RequestBody @Valid PersonSelectRequest req, BindingResult result) {
 
         // レスポンスデータ
-        ApiResult<List<PersonSelectResponse>> apiResult = new ApiResult<>();
+        ApiResult<PersonSelectResponse> apiResult = new ApiResult<>();
 
         if (result.hasErrors()) {
 
@@ -76,9 +75,9 @@ public class PersonSelectController {
      * 個人情報一覧取得処理を実施する。
      * @param req リクエストデータ。
      */
-    private ApiResult<List<PersonSelectResponse>> doSelectList(PersonSelectRequest req) {
+    private ApiResult<PersonSelectResponse> doSelectList(PersonSelectRequest req) {
 
-        List<PersonSelectResponse> resList = new ArrayList<>();
+        PersonSelectResponse res = null;
 
         // 個人IDで個人情報を検索
         PersonMasterDTO condition = new PersonMasterDTO();
@@ -87,19 +86,18 @@ public class PersonSelectController {
 
         // 検索できた場合はファイルパスを設定
         if (null != dto) {
-            PersonSelectResponse res = new PersonSelectResponse();
+            res = new PersonSelectResponse();
             String id = dto.getPersonId();
             res.setPersonId(id);
             res.setPersonName(dto.getPersonName());
             res.setFrontImageFilePath(URL.PERSON_IMG_PATH + id + "/" + URL.FRONT_IMG);
             res.setLeftImageFilePath(URL.PERSON_IMG_PATH + id + "/" + URL.LEFT_IMG);
             res.setRightImageFilePath(URL.PERSON_IMG_PATH + id + "/" + URL.RIGHT_IMG);
-            resList.add(res);
         }
 
-        ApiResult<List<PersonSelectResponse>> ret = new ApiResult<>();
+        ApiResult<PersonSelectResponse> ret = new ApiResult<>();
         ret.setResultCode(ResultCode.SUCCESS);
-        ret.setResultInfo(resList);
+        ret.setResultInfo(res);
 
         return ret;
     }
