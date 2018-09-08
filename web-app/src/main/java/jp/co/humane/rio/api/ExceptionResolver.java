@@ -22,7 +22,7 @@ public class ExceptionResolver {
     private static final Logger log = LoggerFactory.getLogger(ExceptionResolver.class);
 
     /**
-     * HelloWorldException例外が発生した場合は500(サーバエラー)を返す。
+     * ApplicationException例外が発生した場合は500(サーバエラー)を返す。
      * @param ex 例外。
      */
     @ExceptionHandler(ApplicationException.class)

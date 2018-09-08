@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import jp.co.humane.rio.api.consts.URL;
+import jp.co.humane.rio.common.consts.AuthenticateId;
 import jp.co.humane.rio.common.consts.DateFormat;
 import jp.co.humane.rio.common.consts.LogId;
 import jp.co.humane.rio.common.consts.ResultCode;
@@ -34,6 +35,7 @@ import jp.co.humane.rio.common.utils.DateUtils;
 import jp.co.humane.rio.common.utils.ValidationUtils;
 import jp.co.humane.rio.orm.dao.EntryHistoryInfoDAO;
 import jp.co.humane.rio.orm.dao.PersonMasterDAO;
+import jp.co.humane.rio.orm.dto.PersonMasterDTO;
 import jp.co.humane.rio.service.FaceRecognizeService;
 
 /**
@@ -122,7 +124,7 @@ public class AuthenticationController {
 
         // 該当個人IDが指定のカメラ位置の入退室が可能か確認する
         String cameraId = req.getCameraId();
-        Boolean canGoThrough = personDao.hasAuthentication(personId, cameraId);
+        Boolean canGoThrough = hasAuthentication(personId, cameraId);
 
         // 認証結果を履歴に蓄積する
         addAuthHistory(personId, cameraId, canGoThrough, req.getImage());
@@ -169,6 +171,28 @@ public class AuthenticationController {
 
         // 個人IDを返す
         return personId;
+    }
+
+    /**
+     * 個人IDが指定カメラの部屋への入退室が可能かを確認する。
+     * @param personId 個人ID。
+     * @param cameraId カメラID。
+     * @return 入退室可否。
+     */
+    private boolean hasAuthentication(String personId, String cameraId) {
+
+        // 個人IDが存在しない場合はfalse、個人の権限がALLの場合はtrueを返す
+        PersonMasterDTO cond = new PersonMasterDTO();
+        cond.setPersonId(personId);
+        PersonMasterDTO person = personDao.selectOneAvailable(cond);
+        if (null == person) {
+            return false;
+        } else if (StringUtils.equals(person.getAuthId(), AuthenticateId.ALL)) {
+            return true;
+        }
+
+        // それ以外の場合は入退室可能なカメラか否かで判断する
+        return personDao.hasAuthentication(personId, cameraId);
     }
 
     /**

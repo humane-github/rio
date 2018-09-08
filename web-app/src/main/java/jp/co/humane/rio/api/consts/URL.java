@@ -34,6 +34,9 @@ public class URL {
     /** 個人情報更新IF */
     public static final String PERSON_UPDATE = "/v1.0/personInfo/update";
 
+    /** 個人情報登録IF */
+    public static final String PERSON_REGIST = "/v1.0/personInfo/regist";
+
     /** 個人マスタ画像URL */
     public static final String PERSON_IMG_PATH = "/rio/auth/";
 

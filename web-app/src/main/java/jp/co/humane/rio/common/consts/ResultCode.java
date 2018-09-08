@@ -11,7 +11,10 @@ public class ResultCode {
     public static final String SUCCESS = "001";
 
     /** バリデーションエラー */
-    public static final String VALIDATION_ERROR = "101";
+    public static final String VALIDATION_ERROR = "100";
+
+    /** 重複エラー */
+    public static final String DUPLICATE_ERROR = "101";
 
     /**
      * デフォルトコンストラクタ。

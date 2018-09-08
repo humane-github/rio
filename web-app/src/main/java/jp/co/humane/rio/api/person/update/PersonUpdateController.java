@@ -9,7 +9,6 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
@@ -112,11 +111,32 @@ public class PersonUpdateController {
         // この機能で初回登録もできるようにフォルダがなければ作成する
         makeDir(id);
 
+        // 更新対象のファイルを取得
+        MultipartFile frontFile = req.getFrontImageFile();
+        MultipartFile leftFile = req.getLeftImageFile();
+        MultipartFile rightFile = req.getRightImageFile();
+        Map<Path, MultipartFile> fileMap = new HashMap<>();
+        if (frontFile != null && !frontFile.isEmpty()) {
+            fileMap.put(Paths.get(imgPath, id, URL.FRONT_IMG), frontFile);
+        }
+        if (leftFile != null && !leftFile.isEmpty()) {
+            fileMap.put(Paths.get(imgPath, id, URL.LEFT_IMG), leftFile);
+        }
+        if (rightFile != null && !rightFile.isEmpty()) {
+            fileMap.put(Paths.get(imgPath, id, URL.RIGHT_IMG), rightFile);
+        }
+
+        // ファイルの更新がない場合はtrueを返す
+        if (fileMap.isEmpty()) {
+            result.setResultInfo(Boolean.TRUE);
+            return result;
+        }
+
         // 更新前のファイルは削除
-        deleteAuthImg(id);
+        deleteAuthImg(fileMap);
 
         // アップロードされたファイルを配置
-        saveAuthImg(req);
+        saveAuthImg(fileMap);
 
         // 更新用ファイルを作成する
         createUpdateFile();
@@ -126,7 +146,7 @@ public class PersonUpdateController {
     }
 
     /**
-     * 指定の個人IDを持つ個人情報レコードの使命を更新する。
+     * 指定の個人IDを持つ個人情報レコードの氏名を更新する。
      *
      * @param id   個人ID。
      * @param name 氏名。
@@ -163,56 +183,43 @@ public class PersonUpdateController {
 
     /**
      * 指定の個人IDに対する認証用画像ファイルを削除する。
-     * @param id 個人ID。
+     * @param map 更新対象ファイルマップ。
      */
-    private void deleteAuthImg(String id) {
+    private void deleteAuthImg(Map<Path, MultipartFile> fileMap) {
 
-        Stream.of(
-                Paths.get(imgPath, id, URL.FRONT_IMG),
-                Paths.get(imgPath, id, URL.LEFT_IMG),
-                Paths.get(imgPath, id, URL.RIGHT_IMG)
-            ).filter(path -> {
-                return path.toFile().exists();
-            }).forEach(path -> {
-                try {
-                    Files.delete(path);
-                } catch (IOException ex) {
-                    LOGGER.error(LogId.E_PERSON_UPD_FILE_DEL_ERR, path.toAbsolutePath().toString());
-                    throw new ApplicationException(ex);
-                }
-            });
+        fileMap.keySet()
+               .stream()
+               .filter(path -> {
+                   return path.toFile().exists();
+               })
+               .forEach(path -> {
+                   try {
+                       Files.delete(path);
+                   } catch (IOException ex) {
+                       LOGGER.error(LogId.E_PERSON_UPD_FILE_DEL_ERR, path.toAbsolutePath().toString());
+                       throw new ApplicationException(ex);
+                   }
+               });
     }
 
     /**
      * 認証用画像ファイルを保存する。
      *
-     * @param req リクエストデータ。
+     * @param fileMap 更新対象ファイルマップ。
      */
-    private void saveAuthImg(PersonUpdateRequest req) {
+    private void saveAuthImg(Map<Path, MultipartFile> fileMap) {
 
-        String id = req.getPersonId();
-
-        Map<Path, MultipartFile> map = new HashMap<>();
-        map.put(Paths.get(imgPath, id, URL.FRONT_IMG), req.getFrontImageFile());
-        map.put(Paths.get(imgPath, id, URL.LEFT_IMG), req.getLeftImageFile());
-        map.put(Paths.get(imgPath, id, URL.RIGHT_IMG), req.getRightImageFile());
-        map.entrySet().stream().filter(entry -> {
-            MultipartFile file = entry.getValue();
-            if (null == file) {
-                return false;
-            }
-            return !file.isEmpty();
-        })
-        .forEach(entry -> {
-            Path path = entry.getKey();
-            MultipartFile file = entry.getValue();
-            try {
-                Files.write(path, file.getBytes());
-            } catch (IOException ex) {
-                LOGGER.error(LogId.E_PERSON_UPD_IMG_FILE_SAVE_ERR, path.toAbsolutePath().toString());
-                throw new ApplicationException(ex);
-            }
-        });
+        fileMap.entrySet().stream()
+            .forEach(entry -> {
+                Path path = entry.getKey();
+                MultipartFile file = entry.getValue();
+                try {
+                    Files.write(path, file.getBytes());
+                } catch (IOException ex) {
+                    LOGGER.error(LogId.E_PERSON_UPD_IMG_FILE_SAVE_ERR, path.toAbsolutePath().toString());
+                    throw new ApplicationException(ex);
+                }
+            });
     }
 
     /**

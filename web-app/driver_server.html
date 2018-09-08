@@ -302,7 +302,14 @@
         data: '個人ID：<input type="text" name="personId" value="P0001"></input><br/>氏名：<input type="text" name="personName" value="山田太郎"></input><br/>正面画像ファイル：<input type="file" name="frontImageFile"></input><br/>左側画像ファイル：<input type="file" name="leftImageFile"></input><br/>右側画像ファイル：<input type="file" name="rightImageFile"></input><br/>'
       };
 
-      
+      reqData['personUpdate'] = {
+        name: '個人情報登録IF', 
+        url: urlHead + '/v1.0/personInfo/regist', 
+        header: header, 
+        method: 'POST', 
+        resType: 'json', 
+        data: {personId: "p5", personName: "サンプル", sectionId: "s1"}
+      };
       
       return reqData;
     }
