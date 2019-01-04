@@ -44,6 +44,9 @@ public class FaceRecognizeServiceImpl implements FaceRecognizeService {
     /** 終了コード：正常終了 */
     private static final int EXIT_CODE_SUCCESS = 0;
 
+    /** 非一致の値 */
+    private static final String NO_MATCH_VALUE = "-inf";
+
     /** openbrスクリプトの実行ファイル */
     @Value("${rio.openbr.exe-path}")
     private String exePath = null;
@@ -233,7 +236,9 @@ public class FaceRecognizeServiceImpl implements FaceRecognizeService {
         matchRateStrList.remove(0);
 
         // マッチ率をdouble型に変換
-        List<Double> matchRateList = matchRateStrList.stream().map(Double::valueOf).collect(Collectors.toList());
+        List<Double> matchRateList = matchRateStrList.stream()
+                .map(s -> StringUtils.equals(s, NO_MATCH_VALUE) ? "0.0" : s)
+                .map(Double::valueOf).collect(Collectors.toList());
 
         // 順番にマップに格納する
         Map<String, Double> matchRateMap = new HashMap<>();

@@ -67,7 +67,7 @@ public class AuthenticationController {
 
     /** 顔認証のマッチング閾値 */
     @Value("${rio.openbr.threashold-ratio}")
-    private double threasholdRatio = 0.0;
+    private double threasholdRatio = 1.0;
 
     /**
      * 認証IFコントローラ処理。
@@ -162,7 +162,7 @@ public class AuthenticationController {
 
         // パスは 「個人ID/ファイル名」 の形式になっているのでそこから個人IDを抽出
         String personId = StringUtils.split(maxEntry.getKey(), "/")[0];
-        LOGGER.debug("最大マッチ率={}、対象個人ID={}", maxEntry.getValue(), personId);
+        LOGGER.info("最大マッチ率={}、対象個人ID={}", maxEntry.getValue(), personId);
 
         // 最大のマッチ率が閾値を超えていない場合はnullを返す
         if (maxEntry.getValue() < threasholdRatio) {
@@ -224,7 +224,7 @@ public class AuthenticationController {
         Path imgPath = Paths.get(historyDir, dir, fileName).toAbsolutePath();
         try {
             Files.write(imgPath, image.getBytes());
-            LOGGER.debug("認証画像を保存しました。カメラID={}、個人ID={}、パス={}", cameraId, personId, imgPath.toString());
+            LOGGER.info("認証画像を保存しました。カメラID={}、個人ID={}、パス={}", cameraId, personId, imgPath.toString());
         } catch (IOException ex) {
             LOGGER.error(LogId.E_AUTH_IMG_FILE_SAVE_ERR, imgPath.toString());
             throw new ApplicationException(ex);

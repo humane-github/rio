@@ -17,7 +17,7 @@
     <!-- profileがproductionの場合 -->
     <springProfile name="production">
         <property name="APP_LEVEL" value="info" />           <!-- アプリケーションのログレベル：info -->
-        <property name="ROOT_LEVEL" value="warn" />          <!-- ルートロガーのログレベル：warn -->
+        <property name="ROOT_LEVEL" value="info" />          <!-- ルートロガーのログレベル：info -->
         <property name="ROOT_APPENDER" value="FILE" />       <!-- 出力先：ファイル -->
     </springProfile>
 

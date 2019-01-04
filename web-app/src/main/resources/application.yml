@@ -20,7 +20,7 @@ rio:
     version: 1.0
     openbr:
         timeout: 30
-        threashold-ratio: 0.7
+        threashold-ratio: ${AUTH_MATCH_RATIO}
 
 ---
 spring:
