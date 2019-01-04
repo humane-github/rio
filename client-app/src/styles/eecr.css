@@ -1,0 +1,229 @@
+@charset "utf-8";
+
+/*****検索条件テーブル*****/
+.searchCondition h2 {
+  width: 100%;
+  font-size: 100%;
+  letter-spacing: 3px;
+  padding-bottom:2px;
+  padding-top: 5px;
+  margin-bottom: 5px;
+  float: left;
+}
+.searchCondition button {
+  font-size: 12px;
+}
+.searchCondition table {
+  width: auto;
+  border-spacing: 0;
+  font-size: 12px;
+}
+.searchCondition table tr td {
+  padding: 5px 15px;
+  text-align: left;
+}
+.searchCondition table tr td .btn {
+  color: #fff;
+  border: 1px solid seagreen;
+  background-color: seagreen;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-right: 15px;
+  padding-left: 15px;
+  border-radius: 5px;
+  letter-spacing: 1px;
+  text-decoration: none;
+  overflow: hidden;
+  float: right;
+}
+.searchCondition table tr td .btn:hover {
+  background-color: #fff;
+  border: 1px solid seagreen;
+  transition: background-color 0.5s ease-out;
+  transition: color 0.5s ease-out;
+  transition: border 0.5s ease-out;
+  color: seagreen;
+  overflow: hidden;
+}
+.searchCondition table tr td .backBtn {
+  color: #fff;
+  border: 1px solid grey;
+  background-color: grey;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-right: 15px;
+  padding-left: 15px;
+  border-radius: 5px;
+  letter-spacing: 1px;
+  text-decoration: none;
+  overflow: hidden;
+}
+.searchCondition table tr td .backBtn:hover {
+  background-color: #fff;
+  border: 1px solid grey;
+  transition: background-color 0.5s ease-out;
+  transition: color 0.5s ease-out;
+  transition: border 0.5s ease-out;
+  color: grey;
+  overflow: hidden;
+}
+
+
+/*****検索結果テーブル*****/
+.searchResult h2 {
+  width: 100%;
+  font-size: 100%;
+  letter-spacing: 3px;
+  padding-bottom:2px;
+  padding-top: 5px;
+  margin-bottom: 5px;
+  float: left;
+}
+.searchResult button {
+  font-size: 12px;
+}
+.searchResult a {
+  font-size: 12px;
+}
+.searchResult table {
+  width: auto;
+  border-spacing: 0;
+  font-size: 12px;
+}
+.searchResult table th {
+  color: #fff;
+  padding: 8px 15px;
+  background: #258;
+  background: -moz-linear-gradient(rgba(34,85,136,0.7), rgba(34,85,136,0.9) 50%);
+  background: -webkit-gradient(linear, 100% 0%, 100% 50%, from(rgba(34,85,136,0.7)), to(rgba(34,85,136,0.9)));
+  font-weight: bold;
+  border-left: 1px solid #258;
+  border-top: 1px solid #258;
+  border-bottom: 1px solid #258;
+  line-height: 120%;
+  text-align: center;
+  text-shadow: 0 -1px 0 rgba(34,85,136,0.9);
+  box-shadow: 0px 1px 1px rgba(255,255,255,0.3) inset;
+}
+.searchResult table th:first-child {
+  border-radius: 5px 0 0 0;	
+}
+.searchResult table th:last-child {
+  border-radius: 0 5px 0 0;
+  border-right: 1px solid #258;
+  box-shadow: 2px 2px 1px rgba(0,0,0,0.1),0px 1px 1px rgba(255,255,255,0.3) inset;
+}
+.searchResult table tr td {
+  padding: 8px 15px;
+  border-bottom: 1px solid #84b2e0;
+  border-left: 1px solid #84b2e0;
+  text-align: center;
+}
+.searchResult table tr td:last-child {
+  border-right: 1px solid #84b2e0;
+  box-shadow: 2px 2px 1px rgba(0,0,0,0.1);
+}
+.searchResult table tr {
+  background: #fff;
+}
+.searchResult table tr:nth-child(2n+1) {
+  background: #f1f6fc;
+}
+.searchResult table tr:last-child td {
+  box-shadow: 2px 2px 1px rgba(0,0,0,0.1);
+}
+.searchResult table tr:last-child td:first-child {
+  border-radius: 0 0 0 5px;
+}
+.searchResult table tr:last-child td:last-child {
+  border-radius: 0 0 5px 0;
+}
+.searchResult table tr td .btn {
+  color: #fff;
+  border: 1px solid royalblue;
+  background-color: royalblue;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-right: 10px;
+  padding-left: 10px;
+  border-radius: 5px;
+  letter-spacing: 1px;
+  text-decoration: none;
+  overflow: hidden;
+}
+.searchResult table tr td .btn:hover {
+  background-color: #fff;
+  border: 1px solid royalblue;
+  transition: background-color 0.5s ease-out;
+  transition: color 0.5s ease-out;
+  transition: border 0.5s ease-out;
+  color: royalblue;
+  overflow: hidden;
+}
+
+/*****ユーザ編集テーブル*****/
+.userEdit h2 {
+  width: 100%;
+  font-size: 100%;
+  letter-spacing: 3px;
+  padding-bottom:2px;
+  padding-top: 5px;
+  margin-bottom: 5px;
+  float: left;
+}
+.userEdit table {
+  width: auto;
+  border-spacing: 0;
+  font-size: 12px;
+}
+.userEdit table tr td {
+  padding: 5px 15px;
+  text-align: left;
+}
+.userEdit table tr td .editBtn {
+  color: #fff;
+  border: 1px solid royalblue;
+  background-color: royalblue;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-right: 15px;
+  padding-left: 15px;
+  border-radius: 5px;
+  letter-spacing: 1px;
+  text-decoration: none;
+  overflow: hidden;
+  float: right;
+
+}
+.userEdit table tr td .editBtn:hover {
+  background-color: #fff;
+  border: 1px solid royalblue;
+  transition: background-color 0.5s ease-out;
+  transition: color 0.5s ease-out;
+  transition: border 0.5s ease-out;
+  color: royalblue;
+  overflow: hidden;
+}
+.userEdit table tr td .saveBtn {
+  color: #fff;
+  border: 1px solid seagreen;
+  background-color: seagreen;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-right: 15px;
+  padding-left: 15px;
+  border-radius: 5px;
+  letter-spacing: 1px;
+  text-decoration: none;
+  overflow: hidden;
+  float: right;
+}
+.userEdit table tr td .saveBtn:hover {
+  background-color: #fff;
+  border: 1px solid seagreen;
+  transition: background-color 0.5s ease-out;
+  transition: color 0.5s ease-out;
+  transition: border 0.5s ease-out;
+  color: seagreen;
+  overflow: hidden;
+}
